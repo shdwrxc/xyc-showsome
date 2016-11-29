@@ -1,16 +1,16 @@
 package org.xyc.showsome.util;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Maps;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
@@ -21,6 +21,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class HttpClientUtil {
 
@@ -29,130 +30,83 @@ public class HttpClientUtil {
 
     private final static CloseableHttpClient httpClient = getClient();
 
-    public static void sendPost() {
-        HttpPost post = new HttpPost("http://ip.taobao.com/service/getIpInfo.php");
+    public static String doPost(String url, Map<String, String> param) {
+        HttpPost httpPost = new HttpPost(url);
         List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("ip", "180.168.198.139"));
 
-        post.setEntity(new UrlEncodedFormEntity(params, Charset.defaultCharset()));
-        //        HttpEntity entity = new StringEntity("abc", Charset.defaultCharset());
+        if (param != null && param.size() > 0) {
+            for (String key : param.keySet()) {
+                params.add(new BasicNameValuePair(key, param.get(key)));
+            }
+        }
+        httpPost.setEntity(new UrlEncodedFormEntity(params, Charset.defaultCharset()));
+
+        //往body中存放json形式的参数
+//        JSONObject postData = new JSONObject();
+//        if (param != null && param.size() > 0) {
+//            for (String key : param.keySet()) {
+//                postData.put(key, param.get(key));
+//            }
+//        }
+//        StringEntity stringEntity = new StringEntity(postData.toString(), Charset.defaultCharset());
+//        stringEntity.setContentType("application/json");
+//        httpPost.setEntity(stringEntity);
 
         try {
-            CloseableHttpResponse response = httpClient.execute(post);
+            return httpClient.execute(httpPost, new XycResponseHandler());
+        } catch (Exception e) {
 
-            System.out.println("----------------------------------------");
-            System.out.println(response.getStatusLine());
+        }
 
-            // Get hold of the response entity
-            HttpEntity entity = response.getEntity();
+        return "";
+    }
 
-            // If the response does not enclose an entity, there is no need
-            // to bother about connection release
-            StringBuilder sb = new StringBuilder();
+    @Deprecated
+    private static String respString(HttpEntity entity) {
+        StringBuilder sb = new StringBuilder();
+
+        try {
             if (entity != null) {
-                InputStream instream = entity.getContent();
+                InputStream in = entity.getContent();
                 try {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(instream));
+                    BufferedReader br = new BufferedReader(new InputStreamReader(in));
                     String str;
                     while ((str = br.readLine()) != null) {
                         sb.append(str);
                     }
-                    System.out.println(sb.toString());
-                    //                        instream.read();
-                    // do something useful with the response
                 } catch (IOException ex) {
-                    // In case of an IOException the connection will be released
-                    // back to the connection manager automatically
                     throw ex;
                 } finally {
-                    // Closing the input stream will trigger connection release
-                    instream.close();
+                    in.close();
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return sb.toString();
     }
 
-    public static void sendGet() throws Exception {
+    public static String doGet(String url) {
+        HttpGet httpGet = new HttpGet(url);
 
         try {
-            HttpGet httpget = new HttpGet("http://ip.taobao.com/service/getIpInfo.php?ip=180.168.198.139");
+            return httpClient.execute(httpGet, new XycResponseHandler());
+        } catch (Exception e) {
 
-            System.out.println("Executing request " + httpget.getRequestLine());
-            CloseableHttpResponse response = httpClient.execute(httpget);
-            try {
-                System.out.println("----------------------------------------");
-                System.out.println(response.getStatusLine());
-
-                // Get hold of the response entity
-                HttpEntity entity = response.getEntity();
-
-                // If the response does not enclose an entity, there is no need
-                // to bother about connection release
-                StringBuilder sb = new StringBuilder();
-                if (entity != null) {
-                    InputStream instream = entity.getContent();
-                    try {
-                        BufferedReader br = new BufferedReader(new InputStreamReader(instream));
-                        String str;
-                        while ((str = br.readLine()) != null) {
-                            sb.append(str);
-                        }
-                        System.out.println(sb.toString());
-//                        instream.read();
-                        // do something useful with the response
-                    } catch (IOException ex) {
-                        // In case of an IOException the connection will be released
-                        // back to the connection manager automatically
-                        throw ex;
-                    } finally {
-                        // Closing the input stream will trigger connection release
-                        instream.close();
-                    }
-                }
-            } finally {
-                response.close();
-            }
-        } finally {
-//            httpclient.close();
         }
+        return "";
     }
 
-    public static void sendGet1() throws Exception {
-
-        try {
-            HttpGet httpget = new HttpGet("http://ip.taobao.com/service/getIpInfo.php?ip=180.168.198.139");
-
-            System.out.println("Executing request " + httpget.getRequestLine());
-            try {
-
-                // Create a custom response handler
-                ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
-
-                    @Override
-                    public String handleResponse(
-                            final HttpResponse response) throws ClientProtocolException, IOException {
-                        int status = response.getStatusLine().getStatusCode();
-                        if (status >= 200 && status < 300) {
-                            HttpEntity entity = response.getEntity();
-                            return entity != null ? EntityUtils.toString(entity) : null;
-                        } else {
-                            throw new ClientProtocolException("Unexpected response status: " + status);
-                        }
-                    }
-
-                };
-
-                String responseBody = httpClient.execute(httpget, responseHandler);
-                System.out.println(responseBody);
-                JSONObject obj = JSON.parseObject(responseBody);
-                System.out.println(JSON.toJSONString(obj));
-            } finally {
-//                response.close();
+    private static class XycResponseHandler implements ResponseHandler<String> {
+        @Override
+        public String handleResponse(HttpResponse response) throws IOException {
+            int status = response.getStatusLine().getStatusCode();
+            if (status >= 200 && status < 300) {
+                HttpEntity entity = response.getEntity();
+                return entity != null ? EntityUtils.toString(entity) : "";
+            } else {
+                throw new ClientProtocolException("Unexpected response status: " + status);
             }
-        } finally {
-            //            httpclient.close();
         }
     }
 
@@ -179,10 +133,13 @@ public class HttpClientUtil {
     }
 
     public static void main(String[] args) {
-        try {
-            sendPost();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Map<String, String> map = Maps.newHashMap();
+        map.put("ip", "180.168.198.139");
+        String str = doPost("http://ip.taobao.com/service/getIpInfo.php", map);
+
+        String str2 = doGet("http://ip.taobao.com/service/getIpInfo.php?ip=180.168.198.139");
+
+        System.out.println(str);
+        System.out.println(str2);
     }
 }
