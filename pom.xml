@@ -35,5 +35,12 @@
             <version>2.5</version>
             <!--<scope>provided</scope>-->
         </dependency>
+        <!--国产sm算法，sm2，非对称算法，sm3，hash算法，sm4，对称算法（分组算法）-->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>1.55</version>
+        </dependency>
+
     </dependencies>
 </project>

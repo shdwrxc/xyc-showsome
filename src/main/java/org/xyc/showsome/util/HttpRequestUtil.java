@@ -19,6 +19,8 @@ public class HttpRequestUtil {
     private final static String BLANK = " ";
 
     /**
+     * mac的useragent
+     * Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-us) AppleWebKit/531.21.8 (KHTML, like Gecko) Version/4.0.4 Safari/531.21.10
      *
      * chrome（54.0.2840.59 m (64-bit)）
      * Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.59 Safari/537.36
@@ -94,6 +96,11 @@ public class HttpRequestUtil {
         return getClientBrowser(request.getHeader("user-agent"));
     }
 
+    /**
+     * xp是windows nt5.1，vista是windows nt6.0，win7是windows nt6.1，win8是windows nt6.2, win10是windows nt 10.0
+     * @param userAgent
+     * @return
+     */
     public static String getClientOsKernel(String userAgent) {
         if (StringUtil.isEmpty(userAgent)) {
             return "";

@@ -4,9 +4,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Created by CCC on 2016/5/24.
- */
 public class IntegerFormat {
 
     private static final AtomicInteger process = new AtomicInteger();
