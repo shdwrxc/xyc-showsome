@@ -12,6 +12,7 @@ public class IntegerFormat {
 
     private static DecimalFormat df = new DecimalFormat(STR_FORMAT);
 
+    //slower,3500ms
     public static void f1() {
         long l1 = System.currentTimeMillis();
         for (int i = 0; i < 9999999; i++) {
@@ -21,6 +22,7 @@ public class IntegerFormat {
         System.out.println(System.currentTimeMillis() - l1);
     }
 
+    //faster,1300ms
     public static void f2() {
         NumberFormat nf = NumberFormat.getInstance();
         nf.setGroupingUsed(false);
