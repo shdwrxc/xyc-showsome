@@ -7,9 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import sun.misc.BASE64Encoder;
 
 /**
- * Created by IntelliJ IDEA.
- * Author: wks
- * Date: 2016/12/23
+ * created by wks on date: 2016/12/23
  */
 public class Md5Encrypt {
 

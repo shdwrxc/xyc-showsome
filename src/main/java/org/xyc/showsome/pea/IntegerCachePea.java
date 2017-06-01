@@ -1,15 +1,13 @@
-package org.xyc.showsome.sample.common;
+package org.xyc.showsome.pea;
 
 import java.lang.reflect.Field;
 
 /**
- * Created by IntelliJ IDEA.
- * Author: wks
- * Date: 2016/12/2
+ * created by wks on date: 2016/12/2
  *
  * Integer从-128到127是放在缓存里的，不会重新创建对象。由于这一特性，改变缓存的值，可以使得计算不正确
  */
-public class IntegerCache {
+public class IntegerCachePea {
 
     public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException {
 

@@ -1,22 +1,22 @@
-package org.xyc.showsome.sample.common;
+package org.xyc.showsome.pea;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Created by IntelliJ IDEA.
- * Date: 2017/1/5
+ * created by wks on date: 2017/1/5
  */
-public class AtomicSample {
+public class AtomicBooleanPea {
 
-    private static void booleanSample1() {
+    private static void walk1() {
         AtomicBoolean ab = new AtomicBoolean();
         ab.set(true);
-        boolean b = ab.compareAndSet(false, true);
+        //先比较，然后赋值
+        boolean b = ab.compareAndSet(true, false);
         System.out.println(b);
         System.out.println(ab.get());
     }
 
     public static void main(String[] args) {
-        booleanSample1();
+        walk1();
     }
 }

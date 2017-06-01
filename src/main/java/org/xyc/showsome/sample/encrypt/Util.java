@@ -3,9 +3,7 @@ package org.xyc.showsome.sample.encrypt;
 import java.math.BigInteger;
 
 /**
- * Created by IntelliJ IDEA.
- * Author: wks
- * Date: 2016/12/23
+ * created by wks on date: 2016/12/23
  */
 public class Util
 {

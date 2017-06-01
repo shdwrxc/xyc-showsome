@@ -1,7 +1,9 @@
 package org.xyc.showsome.local;
 
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.util.Enumeration;
 
 //import org.hyperic.sigar.CpuPerc;
 //import org.hyperic.sigar.Sigar;
@@ -77,7 +79,29 @@ public class LocalUtil {
 //        output(sigar.getCpuPerc());
 //    }
 
+    public static void retrieveIp() throws Exception {
+        Enumeration allNetInterfaces = NetworkInterface.getNetworkInterfaces();
+        InetAddress ip = null;
+        while (allNetInterfaces.hasMoreElements())
+        {
+            NetworkInterface netInterface = (NetworkInterface) allNetInterfaces.nextElement();
+            System.out.println(netInterface.getName());
+            Enumeration addresses = netInterface.getInetAddresses();
+            while (addresses.hasMoreElements())
+            {
+                ip = (InetAddress) addresses.nextElement();
+                if (ip != null && ip instanceof Inet4Address)
+                {
+                    System.out.println("本机的IP = " + ip.getHostAddress());
+                }
+            }
+        }
+
+        System.out.println(InetAddress.getLocalHost().getHostAddress());//获得本机IP
+    }
+
     public static void main(String[] args) throws Exception {
-        retrieveMac();
+        System.out.println(retrieveMac());
+        retrieveIp();
     }
 }

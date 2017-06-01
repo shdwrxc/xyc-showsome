@@ -1,4 +1,4 @@
-package org.xyc.showsome.sample.common;
+package org.xyc.showsome.pea;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -22,7 +22,11 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HttpClientSample {
+/**
+ * created by wks on date: 2017/6/1
+ */
+
+public class HttpClientPea {
 
     private final static int CLIENT_MAX_TOTAL = 20;
     private final static int TIMEOUT_CONNECTION = 1000 * 10;

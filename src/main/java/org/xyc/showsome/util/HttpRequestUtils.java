@@ -2,7 +2,7 @@ package org.xyc.showsome.util;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class HttpRequestUtil {
+public class HttpRequestUtils {
 
     private final static String BROWSER_IE = "MSIE";
     private final static String BROWSER_EDGE = "Edge";
@@ -60,7 +60,7 @@ public class HttpRequestUtil {
      * @return
      */
     public static String getClientBrowser(String userAgent) {
-        if (StringUtil.isEmpty(userAgent)) {
+        if (StringUtils.isEmpty(userAgent)) {
             return "";
         }
         int i = 0;
@@ -69,15 +69,15 @@ public class HttpRequestUtil {
         }
         if ((i = userAgent.indexOf(BROWSER_EDGE)) > -1) {
             String edgeSplit = userAgent.substring(i);
-            return edgeSplit.substring(0, StringUtil.findFirstSplit(edgeSplit, BLANK)).replace("/", " ");
+            return edgeSplit.substring(0, StringUtils.findFirstSplit(edgeSplit, BLANK)).replace("/", " ");
         }
         if ((i = userAgent.indexOf(BROWSER_CHROME)) > -1) {
             String chromeSplit = userAgent.substring(i);
-            return chromeSplit.substring(0, StringUtil.findFirstSplit(chromeSplit, BLANK)).replace("/", " ");
+            return chromeSplit.substring(0, StringUtils.findFirstSplit(chromeSplit, BLANK)).replace("/", " ");
         }
         if ((i = userAgent.indexOf(BROWSER_FIREFOX)) > -1) {
             String firefoxSplit = userAgent.substring(i);
-            return firefoxSplit.substring(0, StringUtil.findFirstSplit(firefoxSplit, BLANK)).replace("/", " ");
+            return firefoxSplit.substring(0, StringUtils.findFirstSplit(firefoxSplit, BLANK)).replace("/", " ");
         }
         if (userAgent.contains(BROWSER_IE11)) {
             return BROWSER_IE_11_SHOW;
@@ -102,13 +102,13 @@ public class HttpRequestUtil {
      * @return
      */
     public static String getClientOsKernel(String userAgent) {
-        if (StringUtil.isEmpty(userAgent)) {
+        if (StringUtils.isEmpty(userAgent)) {
             return "";
         }
         int i = 0;
         if ((i = userAgent.indexOf(OS_TIP_IN_USER_AGENT)) > -1) {
             String split = userAgent.substring(i);
-            return split.substring(0, StringUtil.findFirstSplit(split, SEMICOLON));
+            return split.substring(0, StringUtils.findFirstSplit(split, SEMICOLON));
         }
         return "";
     }
@@ -120,10 +120,25 @@ public class HttpRequestUtil {
     }
 
     public static String getClientIp(HttpServletRequest request) {
-        if (request.getHeader("x-forwarded-for") == null) {
-            return request.getRemoteAddr();
+        String ip = request.getHeader("X-Forwarded-For");
+        if (!StringUtils.isEmpty(ip) && !"unKnown".equalsIgnoreCase(ip)) {
+            //多次反向代理后会有多个ip值，第一个ip才是真实ip
+            int index = ip.indexOf(",");
+            if (index != -1) {
+                return ip.substring(0, index);
+            } else {
+                return ip;
+            }
         }
-        return request.getHeader("x-forwarded-for");
+        ip = request.getHeader("X-Real-IP");
+        if (!StringUtils.isEmpty(ip) && !"unKnown".equalsIgnoreCase(ip)) {
+            return ip;
+        }
+        return request.getRemoteAddr();
+    }
+
+    public static String getServerIp(HttpServletRequest request) {
+        return request.getLocalAddr();
     }
 
     public static void main(String[] args) {

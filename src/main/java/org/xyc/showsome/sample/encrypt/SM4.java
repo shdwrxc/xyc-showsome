@@ -3,6 +3,10 @@ package org.xyc.showsome.sample.encrypt;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
+/**
+ * created by wks on date: 2016/12/23
+ */
+
 public class SM4
 {
     public static final int SM4_ENCRYPT = 1;

@@ -7,6 +7,10 @@ import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.params.ECPublicKeyParameters;
 import org.bouncycastle.math.ec.ECPoint;
 
+/**
+ * created by wks on date: 2016/12/23
+ */
+
 public class SM2Utils
 {
     //生成随机秘钥对

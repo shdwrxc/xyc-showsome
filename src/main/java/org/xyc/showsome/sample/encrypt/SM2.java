@@ -11,6 +11,10 @@ import org.bouncycastle.math.ec.ECFieldElement;
 import org.bouncycastle.math.ec.ECPoint;
 import org.bouncycastle.math.ec.ECFieldElement.Fp;
 
+/**
+ * created by wks on date: 2016/12/23
+ */
+
 public class SM2
 {
     //测试参数

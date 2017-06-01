@@ -2,7 +2,7 @@ package org.xyc.showsome.util;
 
 import com.google.common.base.Strings;
 
-public class StringUtil {
+public class StringUtils {
 
     public static boolean isEmpty(String str) {
         return Strings.isNullOrEmpty(str);

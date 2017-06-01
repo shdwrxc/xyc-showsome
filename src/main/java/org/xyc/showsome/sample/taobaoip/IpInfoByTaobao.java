@@ -1,6 +1,6 @@
-package org.xyc.showsome.net;
+package org.xyc.showsome.sample.taobaoip;
 
-import org.xyc.showsome.util.FastjsonUtil;
+import org.xyc.showsome.util.FastjsonUtils;
 
 public class IpInfoByTaobao {
 
@@ -145,6 +145,6 @@ public class IpInfoByTaobao {
 
     @Override
     public String toString() {
-        return FastjsonUtil.toJsonString(this);
+        return FastjsonUtils.toJsonString(this);
     }
 }

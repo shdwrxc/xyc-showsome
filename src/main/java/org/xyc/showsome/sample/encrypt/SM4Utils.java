@@ -8,6 +8,8 @@ import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 /**
+ * created by wks on date: 2016/12/23
+ *
  * SM4工具类(这里的PaddingMode采用的是PKCS7)
  */
 

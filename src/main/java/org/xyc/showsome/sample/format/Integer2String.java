@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class IntegerFormat {
+public class Integer2String {
 
     private static final AtomicInteger process = new AtomicInteger();
 

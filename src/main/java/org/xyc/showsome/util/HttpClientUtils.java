@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class HttpClientUtil {
+public class HttpClientUtils {
 
     private final static int CLIENT_MAX_TOTAL = 20;
     private final static int TIMEOUT_CONNECTION = 1000 * 10;
@@ -111,6 +111,11 @@ public class HttpClientUtil {
     }
 
     private static CloseableHttpClient getClient() {
+        //max total和max per route什么区别？
+        //total是总的，per route是每条网址可以分配到的连接数总量
+        //max=10，per route=10，如果只连接一个网址可以这么写
+        //max=20，per route=10，如果还是只连接一个网址，和上面的效果一样，只会达到10，连接2个网址这样的设置才有意义，2个网址各分配10个
+        //max=15，per route=10，如果两个网址，如果已经有10个连接连接到了网址1，网址2此时最多只能被分配到5个连接，网址1释放了连接后，网址2才能得到更多的连接，但不能超过10个
         PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
         cm.setMaxTotal(CLIENT_MAX_TOTAL);
         cm.setDefaultMaxPerRoute(CLIENT_MAX_TOTAL);

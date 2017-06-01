@@ -1,9 +1,7 @@
 package org.xyc.showsome.sample.encrypt;
 
 /**
- * Created by IntelliJ IDEA.
- * Author: wks
- * Date: 2016/12/23
+ * created by wks on date: 2016/12/23
  */
 public class SM3
 {
