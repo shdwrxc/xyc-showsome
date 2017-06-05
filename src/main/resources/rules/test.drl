@@ -1,0 +1,30 @@
+package test;
+
+import org.xyc.showsome.pecan.drools.DroolSample;
+import org.xyc.showsome.pecan.drools.DroolUtils;
+
+rule "inner1"
+    salience 99
+when
+    sample1 : DroolSample(l == 0, $i : i, $l : l, $str : str, $list : list)
+//    list : java.util.List() from sample1  //no effect
+    str1 : String() from $list.get(1);
+//    eval($str.equals(""))
+then
+//    long l2 = DroolUtils.calSth($l);
+//    System.out.println(e);
+    System.out.println("inner1-" + $i);
+    System.out.println("inner1-" + sample1);
+end
+
+
+rule "inner2"
+    salience 88
+when
+    $sample1 : DroolSample(i == 0, $i : i, $str : str)
+then
+//    int i2 = DroolUtils.calSth($i);
+    System.out.println("inner2-" + $sample1);
+    System.out.println("inner2-" + $str);
+end
+
