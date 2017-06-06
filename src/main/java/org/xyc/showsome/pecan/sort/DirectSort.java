@@ -17,9 +17,9 @@ public class DirectSort {
             int temp = a[i];
             int j;
                         /*for (j = i-1; j>=0 && a[j]>temp; j--) {
-17                 //将大于temp的往后移动一位
-18                 a[j+1] = a[j];
-19             }*/
+                 //将大于temp的往后移动一位
+                a[j+1] = a[j];
+             }*/
             for (j = i - 1; j >= 0; j--) {
                 //将大于temp的往后移动一位
                 if (a[j] > temp) {

@@ -25,7 +25,7 @@ public class NIOClient {
         // 设置通道为非阻塞
         channel.configureBlocking(false);
         // 获得一个通道管理器
-        this.selector = Selector.open();
+        selector = Selector.open();
 
         // 客户端连接服务器,其实方法执行并没有实现连接，需要在listen（）方法中调
         //用channel.finishConnect();才能完成连接
@@ -39,7 +39,7 @@ public class NIOClient {
      * 采用轮询的方式监听selector上是否有需要处理的事件，如果有，则进行处理
      * @throws IOException
      */
-    @SuppressWarnings("unchecked")
+//    @SuppressWarnings("unchecked")
     public void listen() throws IOException {
         // 轮询访问selector
         while (true) {

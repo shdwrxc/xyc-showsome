@@ -55,7 +55,7 @@ public class NIOServer {
      *
      * @throws IOException
      */
-    @SuppressWarnings("unchecked")
+//    @SuppressWarnings("unchecked")
     public void listen() throws IOException {
         // ¬÷—Ø∑√Œ selector
         while (true) {

@@ -2,6 +2,8 @@ package org.xyc.showsome.pecan.sort;
 
 /**
  * Created by bugu on 2016/1/25.
+ *
+ * 二分排序
  */
 public class ErFenSort {
 

@@ -1,5 +1,8 @@
 package org.xyc.showsome.pecan.thread;
 
+/**
+ * œﬂ≥Ã≤‚ ‘
+ */
 public class NotifyTest {
 
     private  String flag[] = {"true"};

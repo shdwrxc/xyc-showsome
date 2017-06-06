@@ -2,6 +2,9 @@ package org.xyc.showsome.pecan.sort;
 
 import java.util.Random;
 
+/**
+ * ¿ìËÙÅÅĞò
+ */
 public class QuickSort {
 
     public static void main(String[] args) {
