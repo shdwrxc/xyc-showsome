@@ -12,33 +12,33 @@ import java.util.Date;
 import java.util.Iterator;
 
 /**
- * DatagramChannel ÄÜÍ¨¹ıUDP¶ÁĞ´ÍøÂçÖĞµÄÊı¾İ¡£
- * SocketChannel ÄÜÍ¨¹ıTCP¶ÁĞ´ÍøÂçÖĞµÄÊı¾İ¡£
- * ServerSocketChannel¿ÉÒÔ¼àÌıĞÂ½øÀ´µÄTCPÁ¬½Ó£¬ÏñWeb·şÎñÆ÷ÄÇÑù¡£¶ÔÃ¿Ò»¸öĞÂ½øÀ´µÄÁ¬½Ó¶¼»á´´½¨Ò»¸öSocketChannel¡£
+ * DatagramChannel èƒ½é€šè¿‡UDPè¯»å†™ç½‘ç»œä¸­çš„æ•°æ®ã€‚
+ * SocketChannel èƒ½é€šè¿‡TCPè¯»å†™ç½‘ç»œä¸­çš„æ•°æ®ã€‚
+ * ServerSocketChannelå¯ä»¥ç›‘å¬æ–°è¿›æ¥çš„TCPè¿æ¥ï¼ŒåƒWebæœåŠ¡å™¨é‚£æ ·ã€‚å¯¹æ¯ä¸€ä¸ªæ–°è¿›æ¥çš„è¿æ¥éƒ½ä¼šåˆ›å»ºä¸€ä¸ªSocketChannelã€‚
  */
 
 public class NIOServer {
 
-    //Í¨µÀ¹ÜÀíÆ÷
+    //é€šé“ç®¡ç†å™¨
     private Selector selector;
 
     /**
-     * »ñµÃÒ»¸öServerSocketÍ¨µÀ£¬²¢¶Ô¸ÃÍ¨µÀ×öÒ»Ğ©³õÊ¼»¯µÄ¹¤×÷
+     * è·å¾—ä¸€ä¸ªServerSocketé€šé“ï¼Œå¹¶å¯¹è¯¥é€šé“åšä¸€äº›åˆå§‹åŒ–çš„å·¥ä½œ
      *
-     * @param port °ó¶¨µÄ¶Ë¿ÚºÅ
+     * @param port ç»‘å®šçš„ç«¯å£å·
      * @throws IOException
      */
     public void initServer(int port) throws IOException {
-        // »ñµÃÒ»¸öServerSocketÍ¨µÀ
+        // è·å¾—ä¸€ä¸ªServerSocketé€šé“
         ServerSocketChannel serverChannel = ServerSocketChannel.open();
-        // ÉèÖÃÍ¨µÀÎª·Ç×èÈû
+        // è®¾ç½®é€šé“ä¸ºéé˜»å¡
         serverChannel.configureBlocking(false);
-        // ½«¸ÃÍ¨µÀ¶ÔÓ¦µÄServerSocket°ó¶¨µ½port¶Ë¿Ú
+        // å°†è¯¥é€šé“å¯¹åº”çš„ServerSocketç»‘å®šåˆ°portç«¯å£
         serverChannel.socket().bind(new InetSocketAddress(port));
-        // »ñµÃÒ»¸öÍ¨µÀ¹ÜÀíÆ÷
+        // è·å¾—ä¸€ä¸ªé€šé“ç®¡ç†å™¨
         this.selector = Selector.open();
-        //½«Í¨µÀ¹ÜÀíÆ÷ºÍ¸ÃÍ¨µÀ°ó¶¨£¬²¢Îª¸ÃÍ¨µÀ×¢²áSelectionKey.OP_ACCEPTÊÂ¼ş,×¢²á¸ÃÊÂ¼şºó£¬
-        //µ±¸ÃÊÂ¼şµ½´ïÊ±£¬selector.select()»á·µ»Ø£¬Èç¹û¸ÃÊÂ¼şÃ»µ½´ïselector.select()»áÒ»Ö±×èÈû¡£
+        //å°†é€šé“ç®¡ç†å™¨å’Œè¯¥é€šé“ç»‘å®šï¼Œå¹¶ä¸ºè¯¥é€šé“æ³¨å†ŒSelectionKey.OP_ACCEPTäº‹ä»¶,æ³¨å†Œè¯¥äº‹ä»¶åï¼Œ
+        //å½“è¯¥äº‹ä»¶åˆ°è¾¾æ—¶ï¼Œselector.select()ä¼šè¿”å›ï¼Œå¦‚æœè¯¥äº‹ä»¶æ²¡åˆ°è¾¾selector.select()ä¼šä¸€ç›´é˜»å¡ã€‚
         serverChannel.register(selector, SelectionKey.OP_ACCEPT);
 //        serverChannel.register(selector, SelectionKey.OP_READ);
     }
@@ -51,41 +51,41 @@ public class NIOServer {
     }
 
     /**
-     * ²ÉÓÃÂÖÑ¯µÄ·½Ê½¼àÌıselectorÉÏÊÇ·ñÓĞĞèÒª´¦ÀíµÄÊÂ¼ş£¬Èç¹ûÓĞ£¬Ôò½øĞĞ´¦Àí
+     * é‡‡ç”¨è½®è¯¢çš„æ–¹å¼ç›‘å¬selectorä¸Šæ˜¯å¦æœ‰éœ€è¦å¤„ç†çš„äº‹ä»¶ï¼Œå¦‚æœæœ‰ï¼Œåˆ™è¿›è¡Œå¤„ç†
      *
      * @throws IOException
      */
 //    @SuppressWarnings("unchecked")
     public void listen() throws IOException {
-        // ÂÖÑ¯·ÃÎÊselector
+        // è½®è¯¢è®¿é—®selector
         while (true) {
-            //µ±×¢²áµÄÊÂ¼şµ½´ïÊ±£¬·½·¨·µ»Ø£»·ñÔò,¸Ã·½·¨»áÒ»Ö±×èÈû
-            println("·şÎñ¿ªÊ¼µÈ´ı");
+            //å½“æ³¨å†Œçš„äº‹ä»¶åˆ°è¾¾æ—¶ï¼Œæ–¹æ³•è¿”å›ï¼›å¦åˆ™,è¯¥æ–¹æ³•ä¼šä¸€ç›´é˜»å¡
+            println("æœåŠ¡å¼€å§‹ç­‰å¾…");
             selector.select();
-            // »ñµÃselectorÖĞÑ¡ÖĞµÄÏîµÄµü´úÆ÷£¬Ñ¡ÖĞµÄÏîÎª×¢²áµÄÊÂ¼ş
+            // è·å¾—selectorä¸­é€‰ä¸­çš„é¡¹çš„è¿­ä»£å™¨ï¼Œé€‰ä¸­çš„é¡¹ä¸ºæ³¨å†Œçš„äº‹ä»¶
             Iterator ite = this.selector.selectedKeys().iterator();
             while (ite.hasNext()) {
-                println("·şÎñ½øÈëÑ­»·");
+                println("æœåŠ¡è¿›å…¥å¾ªç¯");
                 SelectionKey key = (SelectionKey) ite.next();
-                // É¾³ıÒÑÑ¡µÄkey,ÒÔ·ÀÖØ¸´´¦Àí
+                // åˆ é™¤å·²é€‰çš„key,ä»¥é˜²é‡å¤å¤„ç†
                 ite.remove();
-                // ¿Í»§¶ËÇëÇóÁ¬½ÓÊÂ¼ş
+                // å®¢æˆ·ç«¯è¯·æ±‚è¿æ¥äº‹ä»¶
                 if (key.isAcceptable()) {
-                    println("·şÎñ¿ªÊ¼Á¬½Ó");
+                    println("æœåŠ¡å¼€å§‹è¿æ¥");
                     ServerSocketChannel server = (ServerSocketChannel) key.channel();
-                    // »ñµÃºÍ¿Í»§¶ËÁ¬½ÓµÄÍ¨µÀ
+                    // è·å¾—å’Œå®¢æˆ·ç«¯è¿æ¥çš„é€šé“
                     SocketChannel channel = server.accept();
-                    println("·şÎñÁ¬½Ó³É¹¦");
-                    // ÉèÖÃ³É·Ç×èÈû
+                    println("æœåŠ¡è¿æ¥æˆåŠŸ");
+                    // è®¾ç½®æˆéé˜»å¡
                     channel.configureBlocking(false);
 
-                    //ÔÚÕâÀï¿ÉÒÔ¸ø¿Í»§¶Ë·¢ËÍĞÅÏ¢Å¶
+                    //åœ¨è¿™é‡Œå¯ä»¥ç»™å®¢æˆ·ç«¯å‘é€ä¿¡æ¯å“¦
                     channel.write(ByteBuffer.wrap(new String("hello").getBytes("UTF-8")));
-                    println("·şÎñ·¢ËÍ¸ø¿Í»§¶ËÏûÏ¢");
-                    //ÔÚºÍ¿Í»§¶ËÁ¬½Ó³É¹¦Ö®ºó£¬ÎªÁË¿ÉÒÔ½ÓÊÕµ½¿Í»§¶ËµÄĞÅÏ¢£¬ĞèÒª¸øÍ¨µÀÉèÖÃ¶ÁµÄÈ¨ÏŞ¡£
+                    println("æœåŠ¡å‘é€ç»™å®¢æˆ·ç«¯æ¶ˆæ¯");
+                    //åœ¨å’Œå®¢æˆ·ç«¯è¿æ¥æˆåŠŸä¹‹åï¼Œä¸ºäº†å¯ä»¥æ¥æ”¶åˆ°å®¢æˆ·ç«¯çš„ä¿¡æ¯ï¼Œéœ€è¦ç»™é€šé“è®¾ç½®è¯»çš„æƒé™ã€‚
                     channel.register(this.selector, SelectionKey.OP_READ);
 
-                    // »ñµÃÁË¿É¶ÁµÄÊÂ¼ş
+                    // è·å¾—äº†å¯è¯»çš„äº‹ä»¶
                 } else if (key.isReadable()) {
                     read(key);
                 }
@@ -101,31 +101,31 @@ public class NIOServer {
     }
 
     /**
-     * ´¦Àí¶ÁÈ¡¿Í»§¶Ë·¢À´µÄĞÅÏ¢ µÄÊÂ¼ş
+     * å¤„ç†è¯»å–å®¢æˆ·ç«¯å‘æ¥çš„ä¿¡æ¯ çš„äº‹ä»¶
      *
      * @param key
      * @throws IOException
      */
     public void read(SelectionKey key) throws IOException {
-        // ·şÎñÆ÷¿É¶ÁÈ¡ÏûÏ¢:µÃµ½ÊÂ¼ş·¢ÉúµÄSocketÍ¨µÀ
+        // æœåŠ¡å™¨å¯è¯»å–æ¶ˆæ¯:å¾—åˆ°äº‹ä»¶å‘ç”Ÿçš„Socketé€šé“
         SocketChannel channel = (SocketChannel) key.channel();
-        // ´´½¨¶ÁÈ¡µÄ»º³åÇø
+        // åˆ›å»ºè¯»å–çš„ç¼“å†²åŒº
         ByteBuffer buffer = ByteBuffer.allocate(10);
         channel.read(buffer);
         byte[] data = buffer.array();
         String msg = new String(data, "UTF-8").trim();
-        System.out.println("·şÎñ¶ËÊÕµ½ĞÅÏ¢£º" + msg);
+        System.out.println("æœåŠ¡ç«¯æ”¶åˆ°ä¿¡æ¯ï¼š" + msg);
         ByteBuffer outBuffer = ByteBuffer.wrap(msg.getBytes("UTF-8"));
         try {
             Thread.sleep(1000 * 5);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        channel.write(outBuffer);// ½«ÏûÏ¢»ØËÍ¸ø¿Í»§¶Ë
+        channel.write(outBuffer);// å°†æ¶ˆæ¯å›é€ç»™å®¢æˆ·ç«¯
     }
 
     /**
-     * Æô¶¯·şÎñ¶Ë²âÊÔ
+     * å¯åŠ¨æœåŠ¡ç«¯æµ‹è¯•
      *
      * @throws IOException
      */

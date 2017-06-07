@@ -1,26 +1,26 @@
 package org.xyc.showsome.pecan.thread;
 
 /**
- * Ïß³Ì²âÊÔ
+ * çº¿ç¨‹æµ‹è¯•
  */
 public class ThreadA extends Thread {
 
     int count = 0;
 
     public void run() {
-        System.out.println(getName() + "½«ÒªÔËĞĞ...");
+        System.out.println(getName() + "å°†è¦è¿è¡Œ...");
         while (!this.isInterrupted()) {
-            System.out.println(getName() + "ÔËĞĞÖĞ" + count++);
+            System.out.println(getName() + "è¿è¡Œä¸­" + count++);
             try {
                 Thread.sleep(40000);
             } catch (InterruptedException e) {
-                System.out.println(getName() + "´Ó×èÈûÖĞÍË³ö...");
+                System.out.println(getName() + "ä»é˜»å¡ä¸­é€€å‡º...");
                 System.out.println("ex before this.isInterrupted()=" + this.isInterrupted());
                 Thread.currentThread().interrupt();
                 System.out.println("ex after this.isInterrupted()=" + this.isInterrupted());
             }
         }
-        System.out.println(getName() + "ÒÑ¾­ÖÕÖ¹!");
+        System.out.println(getName() + "å·²ç»ç»ˆæ­¢!");
     }
 
     public static void main(String[] args) {
@@ -29,7 +29,7 @@ public class ThreadA extends Thread {
             ta.setName("ThreadA");
             ta.start();
             Thread.sleep(2000);
-            System.out.println(ta.getName() + "ÕıÔÚ±»ÖĞ¶Ï...");
+            System.out.println(ta.getName() + "æ­£åœ¨è¢«ä¸­æ–­...");
             System.out.println("before ta.isInterrupted()=" + ta.isInterrupted());
             ta.interrupt();
             System.out.println("after ta.isInterrupted()=" + ta.isInterrupted());

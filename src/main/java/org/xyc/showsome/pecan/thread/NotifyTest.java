@@ -1,7 +1,7 @@
 package org.xyc.showsome.pecan.thread;
 
 /**
- * 线程测试
+ * 绾跨▼娴嬭瘯
  */
 public class NotifyTest {
 
@@ -15,7 +15,7 @@ public class NotifyTest {
             int i = 0;
             while ( i < 5) {
                 try {
-                    sleep(3000);//推迟3秒钟通知
+                    sleep(3000);//鎺ㄨ繜3绉掗挓閫氱煡
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

@@ -3,7 +3,7 @@ package org.xyc.showsome.pecan.sort;
 import java.util.Random;
 
 /**
- * ¿ìËÙÅÅĞò
+ * å¿«é€Ÿæ’åº
  */
 public class QuickSort {
 
@@ -15,10 +15,10 @@ public class QuickSort {
             Random objRandom = new Random();
             iArgs[i] = objRandom.nextInt(100);
         }
-        int left = 0; //Êı×éµÚÒ»¸öÎ»ÖÃ
-        int right = iArgs.length - 1;//Êı×é×îºóÒ»¸öÎ»ÖÃ;
+        int left = 0; //æ•°ç»„ç¬¬ä¸€ä¸ªä½ç½®
+        int right = iArgs.length - 1;//æ•°ç»„æœ€åä¸€ä¸ªä½ç½®;
         QuickSort quickSort = new QuickSort();
-        //¿ìËÙÅÅĞò
+        //å¿«é€Ÿæ’åº
         quickSort.recursive(iArgs,left,right);
 
         for(int i = 0; i < iArgs.length; i++) {
@@ -27,43 +27,43 @@ public class QuickSort {
     }
 
     /**
-     * µİ¹éÑ­»·Êı¾İ
+     * é€’å½’å¾ªç¯æ•°æ®
      *
-     * @param args Êı×é
-     * @param left Êı×é×óÏÂ±ê
-     * @param right Êı×éÓÒÏÂ±ê
+     * @param args æ•°ç»„
+     * @param left æ•°ç»„å·¦ä¸‹æ ‡
+     * @param right æ•°ç»„å³ä¸‹æ ‡
      * @return
      */
     private void recursive(int[] args,int left,int right) {
         if( left < right) {
-            //Êı¾İ´Óleftµ½right×ø±êµÄÊı¾İ½øĞĞÅÅĞò
-            int iIndex = qucikSort(args,left,right); //iIndex ÊÇ»ùÊı·ÅÔÚÊı¾İÎ»ÖÃ
+            //æ•°æ®ä»leftåˆ°rightåæ ‡çš„æ•°æ®è¿›è¡Œæ’åº
+            int iIndex = qucikSort(args,left,right); //iIndex æ˜¯åŸºæ•°æ”¾åœ¨æ•°æ®ä½ç½®
 
-            //µİ¹éËã·¨£¬¶ÔÓÚ»ùÊı×ó±ßÅÅĞò
-            recursive(args,left,iIndex-1); //ÎªÊ²Ã´left²»ÄÜ´Ó0
-            //µİ¹éËã·¨£¬¶ÔÓÚ»ùÊıÓÒ±ßÅÅĞò
-            recursive(args,iIndex+1,right);//ÎªÊ²Ã´ right²»µÈÓÚlength
+            //é€’å½’ç®—æ³•ï¼Œå¯¹äºåŸºæ•°å·¦è¾¹æ’åº
+            recursive(args,left,iIndex-1); //ä¸ºä»€ä¹ˆleftä¸èƒ½ä»0
+            //é€’å½’ç®—æ³•ï¼Œå¯¹äºåŸºæ•°å³è¾¹æ’åº
+            recursive(args,iIndex+1,right);//ä¸ºä»€ä¹ˆ rightä¸ç­‰äºlength
         }
     }
 
     /**
-     * È·¶¨»ùÊı×ó±ßµÄÊı¶¼±ÈËüĞ¡£¬ÓÒ±ßµÄÊı¶¼±ÈËü´ó
+     * ç¡®å®šåŸºæ•°å·¦è¾¹çš„æ•°éƒ½æ¯”å®ƒå°ï¼Œå³è¾¹çš„æ•°éƒ½æ¯”å®ƒå¤§
      *
-     * @param args Êı×é
-     * @param left Êı×é×óÏÂ±ê
-     * @param right Êı×éÓÒÏÂ±ê
+     * @param args æ•°ç»„
+     * @param left æ•°ç»„å·¦ä¸‹æ ‡
+     * @param right æ•°ç»„å³ä¸‹æ ‡
      * @return
      */
     private int qucikSort(int[] args,int left,int right) {
-        int iBase = args[left];; //»ù×¼Êı
+        int iBase = args[left];; //åŸºå‡†æ•°
         while (left < right) {
-            //´ÓÓÒÏò×óÕÒ³öµÚÒ»¸ö±È»ù×¼ÊıĞ¡µÄÊı
+            //ä»å³å‘å·¦æ‰¾å‡ºç¬¬ä¸€ä¸ªæ¯”åŸºå‡†æ•°å°çš„æ•°
             while( left < right && args[right] >= iBase) {
                 right--;
             }
             args[left] = args[right];
 
-            //´Ó×óÏòÓÒÕÒ³öµÚÒ»¸ö±È»ù×¼ÊıĞ¡µÄÊı
+            //ä»å·¦å‘å³æ‰¾å‡ºç¬¬ä¸€ä¸ªæ¯”åŸºå‡†æ•°å°çš„æ•°
             while( left < right && args[left] <= iBase) {
                 left++;
             }
