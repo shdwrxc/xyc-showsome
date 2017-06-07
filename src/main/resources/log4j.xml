@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/' >
+
+	<!--打印到控制台-->
+	<appender name="consoleAppend" class="org.apache.log4j.ConsoleAppender" >
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-d{yyyy-MM-dd HH:mm:ss.SSS} [%p][%c{1}] %m%n" />
+		</layout>
+	</appender>
+
+	<!--只打印错误日志-->
+	<appender name="errorAppender" class="org.apache.log4j.rolling.RollingFileAppender">
+		<rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
+			<param name="FileNamePattern" value="./logs/error.%d{yyyy-MM-dd}.log.zip"/>
+		</rollingPolicy>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-d{yyyy-MM-dd HH:mm:ss.SSS} [%p][%c{1}] %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="ERROR" />
+			<param name="LevelMax" value="ERROR" />
+		</filter>
+	</appender>
+
+	<!--打印全部日志-->
+	<appender name="developAppender" class="org.apache.log4j.rolling.RollingFileAppender">
+		<rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
+			<param name="FileNamePattern" value="./logs/develop.%d{yyyy-MM-dd}.log.zip"/>
+		</rollingPolicy>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-d{yyyy-MM-dd HH:mm:ss.SSS} [%p][%c{1}] %m%n" />
+		</layout>
+	</appender>
+
+	<!--<logger name="com.cccis.base.hystrix" additivity="false">-->
+		<!--<level value="DEBUG" />-->
+		<!--<appender-ref ref="rolling" />-->
+	<!--</logger>-->
+
+	<root>
+		<priority value="INFO" />
+		<appender-ref ref="consoleAppend" />
+		<appender-ref ref="errorAppender" />
+		<appender-ref ref="developAppender" />
+	</root>
+</log4j:configuration>
