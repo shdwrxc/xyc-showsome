@@ -1,6 +1,11 @@
 package org.xyc.showsome.pecan.drools;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.io.Reader;
 
 import org.drools.KnowledgeBase;
@@ -51,6 +56,66 @@ public class DroolTest {
         KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
         kbuilder.add(ResourceFactory.newUrlResource("http://localhost:8080/rules/test.drl"),
                 ResourceType.DRL);
+        //创建知识库
+        KnowledgeBase kbase = KnowledgeBaseFactory.newKnowledgeBase();
+        //将规则包加载到知识库中
+        kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());
+
+        //创建Fact对象
+        DroolSample sample = new DroolSample();
+        //        sample.setStr("hello");
+        sample.setI(0);
+        sample.addList("hi");
+
+        //创建KnowledgeSession,将Fact对象插入到WorkingMemory中
+        StatefulKnowledgeSession ksession = kbase.newStatefulKnowledgeSession();
+        ksession.insert(sample);
+        ksession.fireAllRules();
+        ksession.dispose();
+    }
+
+    @Test
+    public void execStringRule() throws Exception {
+        //远程加载规则包
+        KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
+
+        File file = new File("D:\\project\\xyc-showsome\\src\\main\\resources\\rules\\test.drl");
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        LineNumberReader lr = new LineNumberReader(br); //not necessary, but its ok
+        StringBuilder sb = new StringBuilder();
+        String str;
+//        while ((str = lr.readLine()) != null) {
+        while ((str = br.readLine()) != null) {
+//            sb.append(str);   //can't work
+            sb.append(str).append(System.getProperty("line.separator"));    //ok
+        }
+//        System.out.println(sb);
+
+        kbuilder.add(ResourceFactory.newByteArrayResource(sb.toString().getBytes()), ResourceType.DRL);
+        //创建知识库
+        KnowledgeBase kbase = KnowledgeBaseFactory.newKnowledgeBase();
+        //将规则包加载到知识库中
+        kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());
+
+        //创建Fact对象
+        DroolSample sample = new DroolSample();
+        //        sample.setStr("hello");
+        sample.setI(0);
+        sample.addList("hi");
+
+        //创建KnowledgeSession,将Fact对象插入到WorkingMemory中
+        StatefulKnowledgeSession ksession = kbase.newStatefulKnowledgeSession();
+        ksession.insert(sample);
+        ksession.fireAllRules();
+        ksession.dispose();
+    }
+
+    @Test
+    public void execStreamRule() throws Exception {
+        //远程加载规则包
+        KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
+
+        kbuilder.add(ResourceFactory.newInputStreamResource(DroolTest.class.getClassLoader().getResourceAsStream("rules/test.drl")), ResourceType.DRL);
         //创建知识库
         KnowledgeBase kbase = KnowledgeBaseFactory.newKnowledgeBase();
         //将规则包加载到知识库中

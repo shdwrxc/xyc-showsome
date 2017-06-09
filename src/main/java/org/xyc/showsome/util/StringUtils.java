@@ -8,6 +8,10 @@ public class StringUtils {
         return Strings.isNullOrEmpty(str);
     }
 
+    public static boolean isNotEmpty(String str) {
+        return !isEmpty(str);
+    }
+
     public static int findFirstSplit(String str, String split) {
         if (isEmpty(str)) {
             return 0;
