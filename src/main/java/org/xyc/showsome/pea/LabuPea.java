@@ -15,25 +15,26 @@ public class LabuPea {
 
     private static void shadowclaw1() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2016,11,20);
+        calendar.set(2016, 11, 20);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         logger.info(sdf.format(calendar.getTime()));
 
         long l = System.currentTimeMillis() - calendar.getTimeInMillis();
-        int i = (int)(l / 1000 / 60 / 60 / 24);
+        int i = (int) (l / 1000 / 60 / 60 / 24);
         logger.info("week:{}, day:{}", i / 7, i % 7);
     }
 
     private static void shadowclaw2() {
         Calendar start = Calendar.getInstance();
-        start.set(2016,11,20);
+        start.set(2016, 11, 20);
 
         Calendar end = Calendar.getInstance();
-        end.set(2017,8,26);
+        end.set(2017, 8, 26);
 
         long l = end.getTimeInMillis() - start.getTimeInMillis();
-        logger.info((double)l / 1000/ 60 / 60 / 24 / 7 + "");
+        logger.info(l / 1000 / 60 / 60 / 24 + "");
+        logger.info(l / 1000 / 60 / 60 / 24 / 7 + "");
     }
 
     public static void main(String[] args) {
