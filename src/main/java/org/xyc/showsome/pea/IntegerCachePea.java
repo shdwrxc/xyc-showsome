@@ -16,10 +16,15 @@ public class IntegerCachePea {
         myCache.setAccessible(true);//3
 
         Integer[] newCache = (Integer[]) myCache.get(cache); //4
+
+        System.out.println("before = " + newCache[132]);
+
         newCache[132] = newCache[133]; //5
+
+        System.out.println("after = " + newCache[132]);
 
         int a = 2;
         int b = a + a;
-        System.out.printf("%d + %d = %d", a, a, b); //
+        System.out.printf("%d + %d = %d", a, a, b); //原先4的位置上存储了5，所以打印出了5
     }
 }
