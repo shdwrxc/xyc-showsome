@@ -1,8 +1,8 @@
 package org.xyc.showsome.util;
 
-import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
@@ -86,6 +86,26 @@ public class HttpClientUtils {
         return sb.toString();
     }
 
+    /**
+     * 把字符串参数放入body，post请求
+     * @param url
+     * @param bodyString
+     * @return
+     */
+    public static String sendPostBody(String url, String bodyString) {
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.setEntity(new StringEntity(bodyString, Charset.forName("UTF-8")));
+
+//        HttpHost target = new HttpHost("wefun", 8080, "http");
+        try {
+//            return httpClient.execute(target, httpPost, new XycResponseHandler());
+            return httpClient.execute(httpPost, new XycResponseHandler());
+        } catch (Exception e) {
+
+        }
+        return "";
+    }
+
     public static String doGet(String url) {
         HttpGet httpGet = new HttpGet(url);
 
@@ -125,9 +145,16 @@ public class HttpClientUtils {
                 .setConnectTimeout(TIMEOUT_CONNECTION)
                 .build();
 
+        //如果要加代理
+        //第一个参数你的代理地址，可以ip，可以域名，如果本地，可以localhost或127.0.0.1
+        //第二个参数是端口
+        //然后通过.setProxy(proxy)要加入httpclient，往下看6行
+        HttpHost proxy = new HttpHost("yourproxy", 8888, "http");
+
         CloseableHttpClient httpClient = HttpClients.custom()
                 .setConnectionManager(cm)
                 .setDefaultRequestConfig(config)
+//                .setProxy(proxy)  //加代理
                 .build();
         return httpClient;
     }

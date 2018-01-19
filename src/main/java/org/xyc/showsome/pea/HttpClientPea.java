@@ -3,6 +3,7 @@ package org.xyc.showsome.pea;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
@@ -11,6 +12,8 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
@@ -29,7 +32,7 @@ import java.util.List;
 public class HttpClientPea {
 
     private final static int CLIENT_MAX_TOTAL = 20;
-    private final static int TIMEOUT_CONNECTION = 1000 * 10;
+    private final static int TIMEOUT_CONNECTION = 1000 * 10 * 1000;
 
     private final static CloseableHttpClient httpClient = getClient();
 
@@ -44,6 +47,50 @@ public class HttpClientPea {
 
         try {
             CloseableHttpResponse response = httpClient.execute(post);
+
+            System.out.println("----------------------------------------");
+            System.out.println(response.getStatusLine());
+
+            // Get hold of the response entity
+            HttpEntity entity = response.getEntity();
+
+            // If the response does not enclose an entity, there is no need
+            // to bother about connection release
+            StringBuilder sb = new StringBuilder();
+            if (entity != null) {
+                InputStream instream = entity.getContent();
+                try {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(instream));
+                    String str;
+                    while ((str = br.readLine()) != null) {
+                        sb.append(str);
+                    }
+                    System.out.println(sb.toString());
+                    //                        instream.read();
+                    // do something useful with the response
+                } catch (IOException ex) {
+                    // In case of an IOException the connection will be released
+                    // back to the connection manager automatically
+                    throw ex;
+                } finally {
+                    // Closing the input stream will trigger connection release
+                    instream.close();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void sendPostBody() {
+        HttpPost post = new HttpPost("http://wefun:8080/body/accept/");
+
+        post.setEntity(new StringEntity("happy", Charset.forName("UTF-8")));
+
+//        HttpHost target = new HttpHost("wefun", 8080, "http");
+
+        try {
+            CloseableHttpResponse response = httpClient.execute( post);
 
             System.out.println("----------------------------------------");
             System.out.println(response.getStatusLine());
@@ -209,9 +256,11 @@ public class HttpClientPea {
                 .setConnectTimeout(TIMEOUT_CONNECTION)
                 .build();
 
+        HttpHost proxy = new HttpHost("wefun", 8888, "http");
+
         CloseableHttpClient httpClient = HttpClients.custom()
-                .setConnectionManager(cm)
-                .setDefaultRequestConfig(config)
+                .setConnectionManager(cm).setDefaultRequestConfig(config)
+                .setProxy(proxy)
                 .build();
 //        CloseableHttpClient httpClient = HttpClients.createDefault();
 
@@ -262,7 +311,7 @@ public class HttpClientPea {
 
     public static void main(String[] args) {
         try {
-            sendPost();
+            sendPostBody();
         } catch (Exception e) {
             e.printStackTrace();
         }
