@@ -43,9 +43,10 @@ public class SymmetricEncoder {
             SecretKey original_key = keygen.generateKey();
             //4.获得原始对称密钥的字节数组
             byte[] raw = original_key.getEncoded();
-            //5.根据字节数组生成AES密钥
+            //5.根据字节数组生成AES密钥，这个地方的raw必须是要128位
             SecretKey key = new SecretKeySpec(raw, "AES");
-            //6.根据指定算法AES自成密码器
+            //6.根据指定算法AES自成密码器，下面两句话一个意思，默认即cbc和PKCS5Padding
+//            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             Cipher cipher = Cipher.getInstance("AES");
             //7.初始化密码器，第一个参数为加密(Encrypt_mode)或者解密解密(Decrypt_mode)操作，第二个参数为使用的KEY
             cipher.init(Cipher.ENCRYPT_MODE, key);
