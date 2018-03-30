@@ -132,6 +132,12 @@
             <artifactId>akka-testkit_2.12</artifactId>
             <version>2.5.3</version>
         </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>2.1_3</version>
+        </dependency>
+
     </dependencies>
 
     <build>
