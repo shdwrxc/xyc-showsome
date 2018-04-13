@@ -1,0 +1,7 @@
+2018-04-13 15:43:20.899 [WARN][BeanCopyUtils] class org.xyc.showsome.pecan.copy.Space copy error. java.lang.InstantiationException: org.xyc.showsome.pecan.copy.Space
+2018-04-13 15:43:47.731 [WARN][BeanCopyUtils] class org.xyc.showsome.pecan.copy.Space copy error. java.lang.InstantiationException: org.xyc.showsome.pecan.copy.Space
+2018-04-13 16:08:17.390 [WARN][BeanCopyUtils] class [Lorg.xyc.showsome.pecan.copy.House; copy error. java.lang.InstantiationException: [Lorg.xyc.showsome.pecan.copy.House;
+2018-04-13 16:32:58.543 [WARN][BeanCopyUtils] class org.xyc.showsome.pecan.copy.House copy error. java.lang.NullPointerException
+2018-04-13 16:33:04.465 [WARN][BeanCopyUtils] class org.xyc.showsome.pecan.copy.Space copy error. java.lang.NullPointerException
+2018-04-13 16:34:45.676 [WARN][BeanCopyUtils] class org.xyc.showsome.pecan.copy.House copy error. java.lang.NullPointerException
+2018-04-13 16:34:56.737 [WARN][BeanCopyUtils] class org.xyc.showsome.pecan.copy.Space copy error. java.lang.NullPointerException
