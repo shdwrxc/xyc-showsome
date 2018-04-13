@@ -319,9 +319,52 @@ public class BeanCopySample {
         System.out.println(System.currentTimeMillis() - l);
     }
 
+    private void copyByJson() throws Exception {
+        Source source = new Source();
+        source.setI(6);
+        source.setStr("hello");
+        source.setStr2("world");
+        source.setHouse(new House("jack"));
+        List<Space> list = Lists.newArrayList();
+        list.add(new Space("earth"));
+        source.setList(list);
+        Map<String, String> map = Maps.newHashMap();
+        map.put("where", "here");
+        source.setMap(map);
+        Set<String> set = Sets.newHashSet();
+        set.add("lunch");
+        source.setSet(set);
+        source.setHouses(new House[]{new House("bruce")});
+
+        Source destiny = JSON.parseObject(JSON.toJSONString(source), Source.class);
+
+        System.out.println(JSON.toJSONString(source));
+        System.out.println(JSON.toJSONString(destiny));
+
+        source.setI(16);
+        source.setStr("shanghai");
+        source.setStr2("hai");
+        source.setHouse(new House("alan"));
+        //        source.getHouse().setPeople("tom");
+        source.getList().add(new Space("sun"));
+        source.getMap().put("agmin", "yes");
+        source.getSet().add("dinner");
+        source.setHouses(new House[]{new House("will"), new House("rose")});
+
+        System.out.println(JSON.toJSONString(source));
+        System.out.println(JSON.toJSONString(destiny));
+
+        long l = System.currentTimeMillis();
+        int loop = 999;
+        for (int i = 0; i < loop; i++) {
+            Source destiny1 = JSON.parseObject(JSON.toJSONString(source), Source.class);
+        }
+        System.out.println(System.currentTimeMillis() - l);
+    }
+
     public static void main(String[] args) throws Exception {
         BeanCopySample beanCopy = new BeanCopySample();
-        beanCopy.copyPerformance();
+        beanCopy.copyByJson();
     }
 
     private class MyConverter implements Converter {
