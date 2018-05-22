@@ -5,6 +5,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
@@ -174,6 +176,7 @@ public class BeanCopySample {
         set.add("lunch");
         source.setSet(set);
         source.setHouses(new House[]{new House("bruce")});
+        source.setMonth(MonthType.August);
 
         Source destiny = BeanCopyUtils.copy(source, Source.class);
 
@@ -189,6 +192,7 @@ public class BeanCopySample {
         source.getMap().put("agmin", "yes");
         source.getSet().add("dinner");
         source.setHouses(new House[]{new House("will"), new House("rose")});
+        source.setMonth(MonthType.July);
 
         System.out.println(JSON.toJSONString(source));
         System.out.println(JSON.toJSONString(destiny));
@@ -210,11 +214,24 @@ public class BeanCopySample {
         set.add("lunch");
         source.setSet(set);
         source.setHouses(new House[]{new House("bruce")});
+        source.setMonth(MonthType.August);
+        source.setBigOne(new BigDecimal(66.878786).setScale(3, BigDecimal.ROUND_HALF_UP));
 
         Source destiny = BeanCopyUtils.copy(source, Source.class);
+        Source destiny1 = BeanCopyUtils.copyObject(source, Source.class);
+        Source destiny2 = new Source();
+        try {
+            BeanUtils.copyProperties(destiny2, source);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
 
-        System.out.println(JSON.toJSONString(source));
-        System.out.println(JSON.toJSONString(destiny));
+        System.out.println("source:" + JSON.toJSONString(source));
+        System.out.println("copyyy:" + JSON.toJSONString(destiny));
+        System.out.println("jsonnn:" + JSON.toJSONString(destiny1));
+        System.out.println("apache:" + JSON.toJSONString(destiny2));
 
         source.setI(16);
         source.setStr("shanghai");
@@ -225,25 +242,20 @@ public class BeanCopySample {
         source.getMap().put("agmin", "yes");
         source.getSet().add("dinner");
         source.setHouses(new House[]{new House("will"), new House("rose")});
+        source.setMonth(MonthType.July);
+        source.setBigOne(new BigDecimal(88.8927621).setScale(3, BigDecimal.ROUND_HALF_UP));
 
-        System.out.println(JSON.toJSONString(source));
-        System.out.println(JSON.toJSONString(destiny));
-
-        Source destiny1 = new Source();
-        try {
-            BeanUtils.copyProperties(destiny1, source);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
+        System.out.println("source:" + JSON.toJSONString(source));
+        System.out.println("copyyy:" + JSON.toJSONString(destiny));
+        System.out.println("jsonnn:" + JSON.toJSONString(destiny1));
+        System.out.println("apache:" + JSON.toJSONString(destiny2));
 
         long l = System.currentTimeMillis();
         int loop = 999;
         for (int i = 0; i < loop; i++) {
             Source target = BeanCopyUtils.copy(source, Source.class);
         }
-        System.out.println(System.currentTimeMillis() - l);
+        System.out.println("copyyy:" + (System.currentTimeMillis() - l));
 
         l = System.currentTimeMillis();
         for (int i = 0; i < loop; i++) {
@@ -253,7 +265,94 @@ public class BeanCopySample {
                 e.printStackTrace();
             }
         }
-        System.out.println(System.currentTimeMillis() - l);
+        System.out.println("apache:" + (System.currentTimeMillis() - l));
+
+        l = System.currentTimeMillis();
+        for (int i = 0; i < loop; i++) {
+            Source target = BeanCopyUtils.copyObject(source, Source.class);
+        }
+        System.out.println("jsonnn:" + (System.currentTimeMillis() - l));
+
+    }
+
+    private void copyListPerformance() {
+        Source source = new Source();
+        source.setI(6);
+        source.setStr("hello");
+        source.setStr2("world");
+        source.setHouse(new House("jack"));
+        List<Space> list = Lists.newArrayList();
+        list.add(new Space("earth"));
+        source.setList(list);
+        Map<String, String> map = Maps.newHashMap();
+        map.put("where", "here");
+        source.setMap(map);
+        Set<String> set = Sets.newHashSet();
+        set.add("lunch");
+        source.setSet(set);
+        source.setHouses(new House[]{new House("bruce")});
+        source.setMonth(MonthType.August);
+
+        Source source1 = new Source();
+        source1.setI(8);
+        source1.setStr("bye");
+        source1.setStr2("yesterday");
+        source1.setHouse(new House("marry"));
+        List<Space> list1 = Lists.newArrayList();
+        list1.add(new Space("diqiu"));
+        source1.setList(list1);
+        Map<String, String> map1 = Maps.newHashMap();
+        map1.put("zheli", "nali");
+        source1.setMap(map1);
+        Set<String> set1 = Sets.newHashSet();
+        set1.add("wanfan");
+        source1.setSet(set1);
+        source1.setHouses(new House[]{new House("bulusi")});
+        source1.setMonth(MonthType.June);
+
+        List sources = new ArrayList<>();
+        sources.add(source);
+        sources.add(source1);
+
+        for (int i = 0; i < 100; i++) {
+            sources.add(source.cloneOne());
+        }
+
+        List<Source> destinies = BeanCopyUtils.copyList(sources, Source.class);
+        List<Source> destinies1 = BeanCopyUtils.copyObjects(sources, Source.class);
+
+        System.out.println("source:" + JSON.toJSONString(sources));
+        System.out.println("source:" + JSON.toJSONString(destinies));
+        System.out.println("source:" + JSON.toJSONString(destinies1));
+
+        source.setI(16);
+        source.setStr("shanghai");
+        source.setStr2("hai");
+        source.setHouse(new House("alan"));
+        //        source.getHouse().setPeople("tom");
+        source.getList().add(new Space("sun"));
+        source.getMap().put("agmin", "yes");
+        source.getSet().add("dinner");
+        source.setHouses(new House[]{new House("will"), new House("rose")});
+        source.setMonth(MonthType.July);
+
+        System.out.println("source:" + JSON.toJSONString(sources));
+        System.out.println("source:" + JSON.toJSONString(destinies));
+        System.out.println("source:" + JSON.toJSONString(destinies1));
+
+        long l = System.currentTimeMillis();
+        int loop = 999;
+        for (int i = 0; i < loop; i++) {
+            destinies = BeanCopyUtils.copyList(sources, Source.class);
+        }
+        System.out.println("copyyy:" + (System.currentTimeMillis() - l));
+
+        l = System.currentTimeMillis();
+        for (int i = 0; i < loop; i++) {
+            destinies1 = BeanCopyUtils.copyObjects(sources, Source.class);
+        }
+        System.out.println("jsonnn:" + (System.currentTimeMillis() - l));
+
     }
 
     private void copyByStream() throws Exception {
@@ -272,6 +371,7 @@ public class BeanCopySample {
         set.add("lunch");
         source.setSet(set);
         source.setHouses(new House[]{new House("bruce")});
+        source.setMonth(MonthType.August);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -297,6 +397,7 @@ public class BeanCopySample {
         source.getMap().put("agmin", "yes");
         source.getSet().add("dinner");
         source.setHouses(new House[]{new House("will"), new House("rose")});
+        source.setMonth(MonthType.July);
 
         System.out.println(JSON.toJSONString(source));
         System.out.println(JSON.toJSONString(destiny));
@@ -335,6 +436,7 @@ public class BeanCopySample {
         set.add("lunch");
         source.setSet(set);
         source.setHouses(new House[]{new House("bruce")});
+        source.setMonth(MonthType.August);
 
         Source destiny = JSON.parseObject(JSON.toJSONString(source), Source.class);
 
@@ -350,6 +452,7 @@ public class BeanCopySample {
         source.getMap().put("agmin", "yes");
         source.getSet().add("dinner");
         source.setHouses(new House[]{new House("will"), new House("rose")});
+        source.setMonth(MonthType.July);
 
         System.out.println(JSON.toJSONString(source));
         System.out.println(JSON.toJSONString(destiny));
@@ -364,7 +467,7 @@ public class BeanCopySample {
 
     public static void main(String[] args) throws Exception {
         BeanCopySample beanCopy = new BeanCopySample();
-        beanCopy.copyByJson();
+        beanCopy.copyPerformance();
     }
 
     private class MyConverter implements Converter {

@@ -1,6 +1,7 @@
 package org.xyc.showsome.pecan.copy;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,6 +20,8 @@ public class Source implements Serializable {
     private String str3;
     private Set<String> set;
     private House[] houses;
+    private MonthType month;
+    private BigDecimal bigOne;
 
     public int getI() {
         return i;
@@ -90,5 +93,37 @@ public class Source implements Serializable {
 
     public void setHouses(House[] houses) {
         this.houses = houses;
+    }
+
+    public MonthType getMonth() {
+        return month;
+    }
+
+    public void setMonth(MonthType month) {
+        this.month = month;
+    }
+
+    public BigDecimal getBigOne() {
+        return bigOne;
+    }
+
+    public void setBigOne(BigDecimal bigOne) {
+        this.bigOne = bigOne;
+    }
+
+    public Source cloneOne() {
+        Source source = new Source();
+        source.setI(this.i);
+        source.setStr(this.str);
+        source.setStr2(this.str2);
+        source.setHouse(this.house);
+        source.setList(this.list);
+        source.setMap(this.map);
+        source.setStr3(this.str3);
+        source.setSet(this.set);
+        source.setHouses(this.houses);
+        source.setMonth(this.month);
+        source.setBigOne(this.bigOne);
+        return source;
     }
 }

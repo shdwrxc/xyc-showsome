@@ -1,10 +1,15 @@
 package org.xyc.showsome.pecan.copy;
 
 import java.lang.reflect.Array;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.sf.cglib.beans.BeanCopier;
 import net.sf.cglib.core.Converter;
@@ -13,6 +18,20 @@ import org.slf4j.LoggerFactory;
 
 /**
  * created by wks on date: 2018/4/13
+ *
+ * copy的效率
+ * Cglib的BeanCopier最好
+ * Apache的BeanUtils稍差
+ * Fastjson第三，接近Apache的BeanUtils
+ * ObjectOutputStream第四
+ *
+ * 以上4种方法，前面2种浅拷贝，只复制最外层的对象，后面两种深拷贝
+ *
+ * 本实例中扩展后的BeanCopier的copy方法和fastjson，ObjectOutputStream的区别
+ * 如果原实例中，属性a包含了实例abc，属性b也包含了实例abc，并且和属性a中的实例abc的引用一致
+ * 这种情况下，BeanCopier的copy方法不能让新生成的实例中两个abc的引用一致，新实例中的两个实例abc肯定是两个对象，引用肯定不一致
+ * fastjson和ObjectOutputStream可以保持和原实例完全一致
+ *
  */
 public class BeanCopyUtils {
 
@@ -20,6 +39,29 @@ public class BeanCopyUtils {
 
     private static final Map<String, BeanCopier> classCopier = Maps.newHashMap();
 
+    public static <T, S> List<T> copyList(Collection<S> source, Class<T> targetType) {
+        List<T> result = Lists.<T>newArrayList();
+        if (source == null) {
+            return result;
+        }
+        for (S obj : source) {
+            T t = copy(obj, targetType);
+            if (t != null) {
+                result.add(t);
+            }
+        }
+        return result;
+    }
+    /**
+     * 1.本方法主要是实现深拷贝，BeanCopier和apache的BeanUtils都是浅拷贝，只生成最外层的实例，里面的属性全是之前实例的引用.
+     * 2.不支持没有默认构造方法的类
+     * 3.如果原实例中，属性a包含了实例abc，属性b也包含了实例abc，并且和属性a中的实例abc的引用一致
+     *   这种情况下，本方法不能让新生成的实例中两个abc的引用一致，新实例中的两个实例abc肯定是两个对象，引用肯定不一致
+     * @param source
+     * @param targetType
+     * @param <T>
+     * @return
+     */
     public static <T> T copy(Object source, Class<T> targetType) {
         if (source == null || targetType == null) {
             return null;
@@ -50,6 +92,8 @@ public class BeanCopyUtils {
                             for (int i = 0; i < length; i++) {
                                 Array.set(obj, i, copy(Array.get(value, i)));
                             }
+                        } else if (clazz.isEnum()) {
+                            return Enum.valueOf(clazz, value.toString());
                         } else {
                             obj = clazz.newInstance();
                             if (value instanceof Collection) {
@@ -95,6 +139,10 @@ public class BeanCopyUtils {
             return ((Boolean) value).booleanValue();
         } else if (value instanceof Character) {
             return ((Character) value).charValue();
+        } else if (value instanceof BigDecimal) {
+            return new BigDecimal(value.toString());
+        } else if (value instanceof BigInteger) {
+            return new BigInteger(value.toString());
         }
         return null;
     }
@@ -108,5 +156,39 @@ public class BeanCopyUtils {
         bc = BeanCopier.create(source, destiny, true);
         classCopier.putIfAbsent(key, bc);
         return bc;
+    }
+
+    /**
+     *
+     * @param source
+     * @param targetType
+     * @param <T>
+     * @return
+     */
+    public static <T> List<T> copyObjects(Object source, Class<T> targetType) {
+        return JSON.parseArray(JSON.toJSONString(source), targetType);
+    }
+
+    public static <T> T copyObject(Object source, Class<T> targetType) {
+        return JSON.parseObject(JSON.toJSONString(source), targetType);
+    }
+
+    public static void main(String[] args) {
+        BigInteger bi = new BigInteger("123");
+
+        BigInteger bi1 = new BigInteger(bi.toString());
+
+        System.out.println(bi.intValue());
+        System.out.println(bi1.intValue());
+
+        System.out.println(Integer.parseInt("A", 16));
+
+
+
+        BigDecimal bd = new BigDecimal(12.45678567).setScale(5, BigDecimal.ROUND_HALF_UP);
+        System.out.println(bd.doubleValue());
+
+        BigDecimal hd = new BigDecimal(bd.toString());
+        System.out.println(hd.doubleValue());
     }
 }
