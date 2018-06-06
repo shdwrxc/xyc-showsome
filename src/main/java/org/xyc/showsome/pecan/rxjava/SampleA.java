@@ -1,5 +1,8 @@
 package org.xyc.showsome.pecan.rxjava;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -78,17 +81,12 @@ public class SampleA {
      多次指定上游的线程只有第一次指定的有效, 也就是说多次调用subscribeOn() 只有第一次的有效, 其余的会被忽略.
 
      多次指定下游的线程是可以的, 也就是说每调用一次observeOn() , 下游的线程就会切换一次.
-
-     作者：Season_zlc
-     链接：https://www.jianshu.com/p/8818b98c44e2
-     來源：简书
-     著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
      */
     private static void subscribeNextOnDifferentThread() {
         Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-                System.out.println(Thread.currentThread().getName());
+                System.out.println("producer " + Thread.currentThread().getName());
                 emitter.onNext(1);
                 emitter.onNext(2);
                 emitter.onNext(3);
@@ -98,10 +96,17 @@ public class SampleA {
         }).subscribeOn(Schedulers.newThread()).observeOn(Schedulers.newThread()).subscribe(new Consumer<Integer>() {
                 @Override
                 public void accept(Integer integer) throws Exception {
-                    System.out.println(Thread.currentThread().getName());
+                    System.out.println("consumer " + Thread.currentThread().getName());
                     System.out.println("accept + " + integer);
                 }
         });
+
+        //要加上点延迟才能打印，否则异步走完直接关闭程序了
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

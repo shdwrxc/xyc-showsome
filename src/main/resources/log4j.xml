@@ -41,7 +41,7 @@
 	<root>
 		<priority value="INFO" />
 		<appender-ref ref="consoleAppend" />
-		<appender-ref ref="errorAppender" />
-		<appender-ref ref="developAppender" />
+		<!--<appender-ref ref="errorAppender" />-->
+		<!--<appender-ref ref="developAppender" />-->
 	</root>
 </log4j:configuration>
