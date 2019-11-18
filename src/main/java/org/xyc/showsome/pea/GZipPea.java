@@ -1,10 +1,15 @@
 package org.xyc.showsome.pea;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -52,11 +57,47 @@ public class GZipPea {
         return out.toByteArray();
     }
 
-    public static void main(String[] args) throws Exception{
+    private static void printGzFile() throws Exception {
+        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(new File("D:\\temp\\2019\\07\\test1.json.gz")));
+        byte[] bytes = new byte[3072];
+        ByteBuffer byteBuffer = ByteBuffer.allocate(500000);
+        int i = 0;
+        int j = 0;
+        while ((j = bis.read(bytes)) != -1) {
+            i += j;
+            byteBuffer.put(bytes);
+        }
+        System.out.println(i);
+
+        byteBuffer.flip();
+        byte[] result = new byte[i];
+        byteBuffer.get(result);
+
+        System.out.println(Arrays.toString(result));
+    }
+
+    private static void compressAndPrint() throws Exception {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("D:\\temp\\2019\\07\\test1.json")));
+        StringBuilder sb = new StringBuilder();
         String str = null;
         while ((str = bufferedReader.readLine()) != null) {
-            System.out.println(compress(str, "UTF-8"));
+            sb.append(str);
         }
+        System.out.println(sb.toString());
+        byte[] bytes = compress(sb.toString(), "UTF-8");
+        System.out.println(bytes.length);
+        System.out.println(Arrays.toString(bytes));
+
+        saveFile(bytes);
+    }
+
+    public static void saveFile(byte[] bytes) throws Exception {
+        FileOutputStream os = new FileOutputStream("D:\\temp\\2019\\07\\world.gz");
+        os.write(bytes);
+    }
+
+    public static void main(String[] args) throws Exception{
+        printGzFile();
+        compressAndPrint();
     }
 }

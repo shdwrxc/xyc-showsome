@@ -1,34 +1,40 @@
 package org.xyc.showsome.util;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Strings;
 
 public class GZIPUtils  {
-    public static final String GZIP_ENCODE_UTF_8 = "UTF-8";
-    public static final String GZIP_ENCODE_ISO_8859_1 = "ISO-8859-1";
 
+    private static final Logger logger = LoggerFactory.getLogger(GZIPUtils.class);
+
+    public static final String ENCODE_UTF8 = "UTF-8";
 
     public static byte[] compress(String str, String encoding) {
-        if (str == null || str.length() == 0) {
-            return null;
+        if (Strings.isNullOrEmpty(str)) {
+            return new byte[0];
         }
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        GZIPOutputStream gzip;
-        try {
-            gzip = new GZIPOutputStream(out);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try (GZIPOutputStream gzip = new GZIPOutputStream(baos, 30000)) {
             gzip.write(str.getBytes(encoding));
-            gzip.close();
-        } catch ( Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error(e.toString(), e);
         }
-        return out.toByteArray();
+        return baos.toByteArray();
     }
 
     public static byte[] compress(String str) throws IOException {
-        return compress(str, GZIP_ENCODE_UTF_8);
+        return compress(str, ENCODE_UTF8);
     }
 
     public static byte[] uncompress(byte[] bytes) {
@@ -71,14 +77,19 @@ public class GZIPUtils  {
     }
 
     public static String uncompressToString(byte[] bytes) {
-        return uncompressToString(bytes, GZIP_ENCODE_UTF_8);
+        return uncompressToString(bytes, ENCODE_UTF8);
     }
 
     public static void main(String[] args) throws IOException {
-        String s = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        System.out.println("字符串长度："+s.length());
-        System.out.println("压缩后：："+compress(s).length);
-        System.out.println("解压后："+uncompress(compress(s)).length);
-        System.out.println("解压字符串后：："+uncompressToString(compress(s)).length());
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("D:\\temp\\2019\\07\\test1.json")));
+        StringBuilder sb = new StringBuilder();
+        String str = null;
+        while ((str = bufferedReader.readLine()) != null) {
+            sb.append(str);
+        }
+        System.out.println(sb.toString());
+        byte[] bytes = compress(sb.toString(), "UTF-8");
+        System.out.println(bytes.length);
+        System.out.println(Arrays.toString(bytes));
     }
 }
